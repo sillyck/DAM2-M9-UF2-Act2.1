@@ -64,7 +64,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     private void openPantalla(Class clase) {
-        Intent intent = new Intent(this, clase);
-        startActivity(intent);
+//        Intent intent = new Intent(this, clase);
+//        startActivity(intent);
+        finish();
     }
 }
