@@ -3,12 +3,12 @@
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="230dp">
+    android:layout_height="260dp">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/card_view"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="230dp"
         android:layout_gravity="center"
         card_view:cardCornerRadius="12dp"
         card_view:cardPreventCornerOverlap="false">
@@ -23,7 +23,7 @@
             android:text="Fecha"
             android:textAlignment="center"
             android:textColor="#FBF8F8"
-            android:textSize="24sp"
+            android:textSize="20sp"
             card_view:autoSizeTextType="none" />
 
         <View
@@ -36,7 +36,7 @@
         <TextView
             android:id="@+id/lugar"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="70dp"
             android:layout_marginTop="50dp"
             android:fontFamily="@font/roboto_black"
             android:gravity="center"
@@ -44,7 +44,7 @@
             android:text="Lugar"
             android:textAlignment="center"
             android:textColor="#FBF8F8"
-            android:textSize="30sp"
+            android:textSize="24sp"
             card_view:autoSizeTextType="none" />
 
         <ImageView
@@ -52,7 +52,7 @@
             android:layout_width="70dp"
             android:layout_height="70dp"
             android:layout_marginLeft="90dp"
-            android:layout_marginTop="110dp"
+            android:layout_marginTop="130dp"
             card_view:srcCompat="@drawable/map" />
 
         <ImageView
@@ -60,7 +60,7 @@
             android:layout_width="75dp"
             android:layout_height="75dp"
             android:layout_marginLeft="240dp"
-            android:layout_marginTop="110dp"
+            android:layout_marginTop="130dp"
             card_view:srcCompat="@drawable/ticket" />
 
     </androidx.cardview.widget.CardView>

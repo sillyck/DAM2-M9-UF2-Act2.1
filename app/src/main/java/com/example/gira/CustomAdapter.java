@@ -8,15 +8,23 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
 public class CustomAdapter extends RecyclerView.Adapter<CustomVH>{
 
-    List<String> fecha;
-    List<String> lugar;
+    ArrayList<String> fecha;
+    ArrayList<String> lugar;
+    ArrayList<String> entrada;
 
-    public CustomAdapter(List<String> fecha, List<String> lugar) {
+    public CustomAdapter(ArrayList<String> fecha, ArrayList<String> lugar, ArrayList<String> entrada) {
+        this.fecha = fecha;
+        this.lugar = lugar;
+        this.entrada = entrada;
+    }
+
+    public CustomAdapter(ArrayList<String> fecha, ArrayList<String> lugar) {
         this.fecha = fecha;
         this.lugar = lugar;
     }
@@ -32,6 +40,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomVH>{
     public void onBindViewHolder(@NonNull CustomVH holder, int position) {
         holder.textFecha.setText(fecha.get(position));
         holder.textLugar.setText((lugar.get(position)));
+//        holder.textEntrada.setText((entrada.get(position)));
     }
 
     @Override
@@ -41,14 +50,14 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomVH>{
 }
 
 class CustomVH extends RecyclerView.ViewHolder{
-    TextView textFecha, textLugar;
+    TextView textFecha, textLugar, textEntrada;
     private CustomAdapter adapter;
 
     public CustomVH(@NonNull View itemView) {
         super(itemView);
-
         textFecha = itemView.findViewById(R.id.fecha);
         textLugar = itemView.findViewById(R.id.lugar);
+//        textEntrada = itemView.findViewById(R.id.ticket);
     }
 
     public CustomVH linkAdapter(CustomAdapter adapter) {

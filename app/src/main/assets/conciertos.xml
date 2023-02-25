@@ -4,12 +4,12 @@
         <fecha>17 MAR 2023</fecha>
         <ciudad>BARCELONA</ciudad>
         <escenarios>PALAU SANT JORDI</escenarios>
-        <entrada>https://www.ticketmaster.es/event/29595?subchannel_id=11803&brand=base_mb_es</entrada>
+        <entrada>https://www.ticketmaster.es/event/29595?subchannel_id=11803&amp;brand=base_mb_es</entrada>
     </concierto>
     <concierto>
         <fecha>31 MAR 2023</fecha>
         <ciudad>CÁDIZ</ciudad>
-        <escenarios>PRIMAVERSA TROMPETERA FESTIVAL</escenarios>
+        <escenarios>PRIMAVERA TROMPETERA FESTIVAL</escenarios>
         <entrada>https://primaveratrompeterafestival.com/entradas/</entrada>
     </concierto>
     <concierto>
@@ -22,19 +22,19 @@
         <fecha>15 ABR 2023</fecha>
         <ciudad>VALENCIA</ciudad>
         <escenarios>PLAZA DE TOROS</escenarios>
-        <entrada>https://www.ticketmaster.es/event/32721?subchannel_id=11803&brand=base_mb_es</entrada>
+        <entrada>https://www.ticketmaster.es/event/32721?subchannel_id=11803&amp;brand=base_mb_es</entrada>
     </concierto>
     <concierto>
         <fecha>21 ABR 2023</fecha>
         <ciudad>SALAMANCA</ciudad>
         <escenarios>ENJOY MULTIUSOS</escenarios>
-        <entrada>https://www.ticketmaster.es/event/32587?subchannel_id=11803&brand=base_mb_es</entrada>
+        <entrada>https://www.ticketmaster.es/event/32587?subchannel_id=11803&amp;brand=base_mb_es</entrada>
     </concierto>
     <concierto>
         <fecha>22 ABR 2023</fecha>
         <ciudad>BILBAO</ciudad>
         <escenarios>ARENA MIRIBILLA</escenarios>
-        <entrada>https://www.ticketmaster.es/event/32675?subchannel_id=11803&brand=base_mb_es</entrada>
+        <entrada>https://www.ticketmaster.es/event/32675?subchannel_id=11803&amp;brand=base_mb_es</entrada>
     </concierto>
     <concierto>
         <fecha>05 MAY 2023</fecha>

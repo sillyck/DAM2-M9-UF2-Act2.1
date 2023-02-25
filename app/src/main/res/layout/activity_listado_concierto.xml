@@ -1,23 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<LinearLayout xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:layout_alignParentTop="true"
     android:layout_width="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android">
-        <Button
-            android:id="@+id/tornaListado"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginEnd="5dp"
-            android:layout_marginBottom="5dp"
-            android:background="#359c5e"
-            android:clickable="true"
-            android:padding="5dp"
-            android:text="Torna"
-            android:textColor="#ffffff"/>
+    <Button
+        android:id="@+id/tornaListado"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="5dp"
+        android:background="#359c5e"
+        android:clickable="true"
+        android:padding="5dp"
+        android:text="Torna"
+        android:textColor="#ffffff"/>
+
+
+    <ImageView
+        android:id="@+id/listamuteOn"
+        android:layout_width="35dp"
+        android:layout_height="42dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.957"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.023"
+        android:layout_marginLeft="350dp"
+        android:layout_marginTop="-55dp"
+        android:layout_marginBottom="12dp"
+        app:srcCompat="@drawable/volumenon" />
+
+    <ImageView
+        android:id="@+id/listamuteOff"
+        android:layout_width="35dp"
+        android:layout_height="42dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.957"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.023"
+        android:layout_marginLeft="350dp"
+        android:layout_marginTop="-55dp"
+        android:layout_marginBottom="12dp"
+        app:srcCompat="@drawable/volumenoff" />
 
     <ScrollView
         android:layout_width="0dp"

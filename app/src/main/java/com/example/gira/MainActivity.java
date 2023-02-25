@@ -89,6 +89,10 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public MediaPlayer getMp() {
+        return mp;
+    }
+
     private void openPantalla(Class clase) {
         Intent intent = new Intent(this, clase);
         startActivity(intent);

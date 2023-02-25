@@ -6,7 +6,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -28,37 +31,68 @@ import javax.xml.parsers.ParserConfigurationException;
 
 public class ListadoConciertoActivity extends AppCompatActivity {
     private Button tornar;
+    private ImageView muteOn, muteOff;
     private ArrayList personNames = new ArrayList<>(Arrays.asList("Person 1", "Person 2", "Person 3", "Person 4", "Person 5", "Person 6", "Person 7"));
+    private ArrayList<String> fecha = new ArrayList<>();
+    private ArrayList<String> lugar = new ArrayList<>();
+    private ArrayList<String> mapa = new ArrayList<>();
+    private ArrayList<String> entrada = new ArrayList<>();
+    private MainActivity main = new MainActivity();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_listado_concierto);
 
-
         try {
-            // Leemos XML con DOM
             InputStream input = getAssets().open("conciertos.xml");
             DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder docBuilder = builderFactory.newDocumentBuilder();
-            Document doc = docBuilder.parse(input);
-            NodeList nList = doc.getElementsByTagName("concierto");
+            DocumentBuilder documentBuilder = builderFactory.newDocumentBuilder();
+            Document document = documentBuilder.parse(input);
+            NodeList nList = document.getElementsByTagName("concierto");
 
-
-
-        } catch (IOException | ParserConfigurationException | SAXException e) {
+            for(int i = 0; i<nList.getLength(); i++){
+                Node node = nList.item(i);
+                if (node.getNodeType() == Node.ELEMENT_NODE){
+                    Element elm = (Element) nList.item(i);
+//                    fecha.add(node.getChildNodes().item(1).getTextContent());
+//                    lugar.add(node.getChildNodes().item(3).getTextContent() + " - " + node.getChildNodes().item(5).getTextContent());
+                    fecha.add(elm.getElementsByTagName("fecha").item(0).getTextContent());
+                    lugar.add(elm.getElementsByTagName("ciudad").item(0).getTextContent() + " - " + elm.getElementsByTagName("escenarios").item(0).getTextContent());
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+        } catch (SAXException e) {
             e.printStackTrace();
         }
 
-        List<String> fecha = new LinkedList<>();
-        fecha.add(personNames.get(1).toString());
+        muteOn = findViewById(R.id.listamuteOn);
+        muteOff = findViewById(R.id.listamuteOff);
+        muteOff.setEnabled(false);
+        muteOn.setOnClickListener(v ->{
+            main.getMp().pause();
+            muteOn.setEnabled(false);
+            muteOn.setVisibility(View.INVISIBLE);
+            muteOff.setVisibility(View.VISIBLE);
+            muteOff.setEnabled(true);
+        });
 
-        List<String> lugar = new LinkedList<>();
-        lugar.add(personNames.get(1).toString());
+        muteOff.setOnClickListener(v ->{
+            main.getMp().start();
+            muteOn.setEnabled(true);
+            muteOn.setVisibility(View.VISIBLE);
+            muteOff.setVisibility(View.INVISIBLE);
+            muteOff.setEnabled(false);
+        });
+
 
 
         RecyclerView recyclerView = findViewById(R.id.recycle);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+//        CustomAdapter adapter = new CustomAdapter(fecha, lugar, entrada);
         CustomAdapter adapter = new CustomAdapter(fecha, lugar);
         recyclerView.setAdapter(adapter);
 
