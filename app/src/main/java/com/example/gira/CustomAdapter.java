@@ -13,10 +13,12 @@ import java.util.List;
 
 public class CustomAdapter extends RecyclerView.Adapter<CustomVH>{
 
-    List<String> items;
+    List<String> fecha;
+    List<String> lugar;
 
-    public CustomAdapter(List<String> items) {
-        this.items = items;
+    public CustomAdapter(List<String> fecha, List<String> lugar) {
+        this.fecha = fecha;
+        this.lugar = lugar;
     }
 
     @NonNull
@@ -28,23 +30,25 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomVH>{
 
     @Override
     public void onBindViewHolder(@NonNull CustomVH holder, int position) {
-        holder.textView.setText(items.get(position));
+        holder.textFecha.setText(fecha.get(position));
+        holder.textLugar.setText((lugar.get(position)));
     }
 
     @Override
     public int getItemCount() {
-        return items.size();
+        return fecha.size();
     }
 }
 
 class CustomVH extends RecyclerView.ViewHolder{
-    TextView textView;
+    TextView textFecha, textLugar;
     private CustomAdapter adapter;
 
     public CustomVH(@NonNull View itemView) {
         super(itemView);
 
-        textView = itemView.findViewById(R.id.fecha);
+        textFecha = itemView.findViewById(R.id.fecha);
+        textLugar = itemView.findViewById(R.id.lugar);
     }
 
     public CustomVH linkAdapter(CustomAdapter adapter) {
