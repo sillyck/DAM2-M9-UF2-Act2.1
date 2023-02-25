@@ -13,7 +13,7 @@ import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Button mapa;
+    private Button mapa, listado;
     private ImageView muteOn, muteOff;
     private int[] canciones = new int[]{R.raw.nosotros,R.raw.fuegofuego,R.raw.cuestiondefe,R.raw.sudoresfrios,R.raw.masalchol,R.raw.alatumba,R.raw.dimequesi};
     private MediaPlayer mp;
@@ -61,6 +61,11 @@ public class MainActivity extends AppCompatActivity {
         mapa = findViewById(R.id.mapa);
         mapa.setOnClickListener(v -> {
             openPantalla(MapsActivity.class);
+        });
+
+        listado = findViewById(R.id.listado);
+        listado.setOnClickListener(v -> {
+            openPantalla((ListadoConciertoActivity.class));
         });
     }
 
