@@ -1,10 +1,15 @@
 package com.example.gira;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.GestureDetectorCompat;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -16,6 +21,7 @@ public class MainActivity extends AppCompatActivity {
     private boolean isPlaying = false;
     private Musica musica;
 
+    private GestureDetectorCompat mGestureDetector;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -25,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
 
         musica = new Musica();
 
+        mGestureDetector = new GestureDetectorCompat(this, new GestureListenner());
 
         musica.playAudio(MainActivity.this);
 
@@ -53,7 +60,24 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    private class GestureListenner extends GestureDetector.SimpleOnGestureListener{
 
+        //Obre el llistat de concerts
+        @Override
+        public void onLongPress(@NonNull MotionEvent e) {
+            super.onLongPress(e);
+            openPantalla(ListadoConciertoActivity.class);
+        }
+
+        //Obre el mapa amb els concerts
+
+
+        @Override
+        public boolean onDoubleTapEvent(@NonNull MotionEvent e) {
+            openPantalla(ListadoConciertoActivity.class);
+            return super.onDoubleTapEvent(e);
+        }
+    }
 
     @Override
     protected void onSaveInstanceState(Bundle estadoGuardado){
