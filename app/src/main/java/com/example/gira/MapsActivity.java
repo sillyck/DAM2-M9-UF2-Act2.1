@@ -48,11 +48,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         inicio = findViewById(R.id.tornaMaps);
 
         inicio.setOnClickListener(v -> {
+            musica.musicaBotones(MapsActivity.this);
             constants.setMapaGeneral(false);
             openPantalla(MainActivity.class);
         });
 
         mute.setOnClickListener(v ->{
+            musica.musicaBotones(MapsActivity.this);
             if(!musica.isMuted()){
                 musica.pausaAudio();
                 musica.setMuted(true);

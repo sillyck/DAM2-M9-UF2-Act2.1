@@ -85,6 +85,7 @@ public class ListadoConciertoActivity extends AppCompatActivity {
 
 
         mute.setOnClickListener(v ->{
+            musica.musicaBotones(ListadoConciertoActivity.this);
             if(!musica.isMuted()){
                 musica.pausaAudio();
                 musica.setMuted(true);
@@ -107,6 +108,7 @@ public class ListadoConciertoActivity extends AppCompatActivity {
 
         tornar = findViewById(R.id.tornaListado);
         tornar.setOnClickListener(v -> {
+            musica.musicaBotones(ListadoConciertoActivity.this);
             openPantalla();
         });
 

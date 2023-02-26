@@ -25,6 +25,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomVH>{
     ArrayList<String> lng;
     Context context;
     Constants constants;
+    Musica musica;
 
     public CustomAdapter(Context context, ArrayList<String> fecha, ArrayList<String> lugar, ArrayList<String> entrada,
                          ArrayList<String> lat, ArrayList<String> lng) {
@@ -48,12 +49,14 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomVH>{
         holder.textFecha.setText(fecha.get(position));
         holder.textLugar.setText((lugar.get(position)));
         holder.imgEntrada.setOnClickListener( v -> {
+            musica.musicaBotones(context);
             Uri url = Uri.parse(entrada.get(position));
             Intent intent = new Intent(Intent.ACTION_VIEW, url);
             context.startActivity(intent);
         });
 
         holder.imgMapa.setOnClickListener( v -> {
+            musica.musicaBotones(context);
             constants.setNombreGps(lugar.get(position));
             constants.setLat(Double.parseDouble(lat.get(position)));
             constants.setLng(Double.parseDouble(lng.get(position)));
