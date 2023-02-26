@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -31,18 +32,23 @@ import javax.xml.parsers.ParserConfigurationException;
 
 public class ListadoConciertoActivity extends AppCompatActivity {
     private Button tornar;
-    private ImageView muteOn, muteOff;
-    private ArrayList personNames = new ArrayList<>(Arrays.asList("Person 1", "Person 2", "Person 3", "Person 4", "Person 5", "Person 6", "Person 7"));
+    private ImageView mute;
+    private boolean isPlaying = false;
+    private Musica musica;
+    private MainActivity main;
     private ArrayList<String> fecha = new ArrayList<>();
     private ArrayList<String> lugar = new ArrayList<>();
     private ArrayList<String> mapa = new ArrayList<>();
     private ArrayList<String> entrada = new ArrayList<>();
-    private MainActivity main = new MainActivity();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_listado_concierto);
+        musica = new Musica();
+        main = new MainActivity();
+        mute = findViewById(R.id.listamute);
 
         try {
             InputStream input = getAssets().open("conciertos.xml");
@@ -55,8 +61,6 @@ public class ListadoConciertoActivity extends AppCompatActivity {
                 Node node = nList.item(i);
                 if (node.getNodeType() == Node.ELEMENT_NODE){
                     Element elm = (Element) nList.item(i);
-//                    fecha.add(node.getChildNodes().item(1).getTextContent());
-//                    lugar.add(node.getChildNodes().item(3).getTextContent() + " - " + node.getChildNodes().item(5).getTextContent());
                     fecha.add(elm.getElementsByTagName("fecha").item(0).getTextContent());
                     lugar.add(elm.getElementsByTagName("ciudad").item(0).getTextContent() + " - " + elm.getElementsByTagName("escenarios").item(0).getTextContent());
                 }
@@ -69,24 +73,20 @@ public class ListadoConciertoActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        muteOn = findViewById(R.id.listamuteOn);
-        muteOff = findViewById(R.id.listamuteOff);
-        muteOff.setEnabled(false);
-        muteOn.setOnClickListener(v ->{
-            main.getMp().pause();
-            muteOn.setEnabled(false);
-            muteOn.setVisibility(View.INVISIBLE);
-            muteOff.setVisibility(View.VISIBLE);
-            muteOff.setEnabled(true);
+
+        mute.setOnClickListener(v ->{
+            if(main.isPlaying()){
+                musica.pausaAudio();
+                main.setPlaying(false);
+                mute.setImageResource(R.drawable.volumenoff);
+
+            }else {
+                musica.resumeAudio();
+                main.setPlaying(true);
+                mute.setImageResource(R.drawable.volumenon);
+            }
         });
 
-        muteOff.setOnClickListener(v ->{
-            main.getMp().start();
-            muteOn.setEnabled(true);
-            muteOn.setVisibility(View.VISIBLE);
-            muteOff.setVisibility(View.INVISIBLE);
-            muteOff.setEnabled(false);
-        });
 
 
 

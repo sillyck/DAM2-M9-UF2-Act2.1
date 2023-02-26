@@ -2,61 +2,45 @@ package com.example.gira;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.content.res.AssetFileDescriptor;
-import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
     private Button mapa, listado;
-    private ImageView muteOn, muteOff;
-    private int[] canciones = new int[]{R.raw.nosotros,R.raw.fuegofuego,R.raw.cuestiondefe,R.raw.sudoresfrios,R.raw.masalchol,R.raw.alatumba,R.raw.dimequesi};
-    private MediaPlayer mp;
-    private int i=0;
+    private ImageView mute;
+    private boolean isPlaying = false;
+    private Musica musica;
 
 
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        MediaPlayer mp = MediaPlayer.create(this, canciones[0]);
-        mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-            @Override
-            public void onCompletion(MediaPlayer mp) {
-                if (i < canciones.length) {
-                    mp.start();
-                    i = 0;
-                }
+        musica = new Musica();
+
+
+        musica.playAudio(MainActivity.this);
+
+        mute = findViewById(R.id.muteMain);
+        mute.setOnClickListener(v ->{
+            if(isPlaying){
+                musica.pausaAudio();
+                isPlaying = false;
+                mute.setImageResource(R.drawable.volumenoff);
+            }else {
+                musica.resumeAudio();
+                isPlaying = true;
+                mute.setImageResource(R.drawable.volumenon);
             }
         });
-        mp.start();
 
-
-
-        muteOn = findViewById(R.id.muteOn);
-        muteOff = findViewById(R.id.muteOff);
-        muteOff.setEnabled(false);
-        muteOn.setOnClickListener(v ->{
-            mp.pause();
-            muteOn.setEnabled(false);
-            muteOn.setVisibility(View.INVISIBLE);
-            muteOff.setVisibility(View.VISIBLE);
-            muteOff.setEnabled(true);
-        });
-
-        muteOff.setOnClickListener(v ->{
-            mp.start();
-            muteOn.setEnabled(true);
-            muteOn.setVisibility(View.VISIBLE);
-            muteOff.setVisibility(View.INVISIBLE);
-            muteOff.setEnabled(false);
-        });
 
         mapa = findViewById(R.id.mapa);
         mapa.setOnClickListener(v -> {
@@ -74,8 +58,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onSaveInstanceState(Bundle estadoGuardado){
         super.onSaveInstanceState(estadoGuardado);
-        if (mp != null) {
-            int pos = mp.getCurrentPosition();
+        if (musica.getMp() != null) {
+            int pos = musica.getMp().getCurrentPosition();
             estadoGuardado.putInt("posicion", pos);
         }
     }
@@ -83,18 +67,22 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onRestoreInstanceState(Bundle estadoGuardado){
         super.onRestoreInstanceState(estadoGuardado);
-        if (estadoGuardado != null && mp != null) {
+        if (estadoGuardado != null && musica.getMp() != null) {
             int pos = estadoGuardado.getInt("posicion");
-            mp.seekTo(pos);
+            musica.getMp().seekTo(pos);
         }
-    }
-
-    public MediaPlayer getMp() {
-        return mp;
     }
 
     private void openPantalla(Class clase) {
         Intent intent = new Intent(this, clase);
         startActivity(intent);
+    }
+
+    public boolean isPlaying() {
+        return isPlaying;
+    }
+
+    public void setPlaying(boolean playing) {
+        isPlaying = playing;
     }
 }
