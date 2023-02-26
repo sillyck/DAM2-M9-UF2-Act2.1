@@ -46,7 +46,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         nMapView.setMinZoomPreference(5.0f);
         nMapView.moveCamera(CameraUpdateFactory.newLatLng(zoom));
 
-        LatLng SEVILLA = new LatLng(37.40459012520492, -6.007915196321647);
         LatLng BARCELONA = new LatLng(41.36342804571407, 2.152582269405529);
         LatLng CADIZ = new LatLng(36.70942989964542, -6.033733478396658);
         LatLng PAMPLONA = new LatLng(42.79604851460114, -1.6352923749240087);
@@ -57,7 +56,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         LatLng MALLORCA = new LatLng(39.505014292717306, 2.5212251136752086);
         LatLng MURCIA = new LatLng(37.98377767244282, -1.1122911438896461);
 
-        mMap.addMarker(new MarkerOptions().position(SEVILLA).title("SEVILLA").icon(BitmapDescriptorFactory.fromResource(R.drawable.marcadorhdlr)));
         mMap.addMarker(new MarkerOptions().position(BARCELONA).title("BARCELONA").icon(BitmapDescriptorFactory.fromResource(R.drawable.marcadorhdlr)));
         mMap.addMarker(new MarkerOptions().position(CADIZ).title("CADIZ").icon(BitmapDescriptorFactory.fromResource(R.drawable.marcadorhdlr)));
         mMap.addMarker(new MarkerOptions().position(PAMPLONA).title("PAMPLONA").icon(BitmapDescriptorFactory.fromResource(R.drawable.marcadorhdlr)));
