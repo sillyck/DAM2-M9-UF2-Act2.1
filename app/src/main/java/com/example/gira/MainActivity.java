@@ -8,13 +8,15 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
     private Button mapa, listado;
     private ImageView mute;
-    private boolean isPlaying = false;
     private Musica musica;
+    private Constants constants;
+    private int musicaPosition;
 
 
     @SuppressLint("MissingInflatedId")
@@ -24,19 +26,19 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         musica = new Musica();
-
+        mute = findViewById(R.id.muteMain);
 
         musica.playAudio(MainActivity.this);
 
-        mute = findViewById(R.id.muteMain);
+
         mute.setOnClickListener(v ->{
-            if(isPlaying){
+            if(!musica.isMuted()){
                 musica.pausaAudio();
-                isPlaying = false;
+                musica.setMuted(true);
                 mute.setImageResource(R.drawable.volumenoff);
             }else {
                 musica.resumeAudio();
-                isPlaying = true;
+                musica.setMuted(false);
                 mute.setImageResource(R.drawable.volumenon);
             }
         });
@@ -44,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
 
         mapa = findViewById(R.id.mapa);
         mapa.setOnClickListener(v -> {
+            constants.setMapaGeneral(true);
             openPantalla(MapsActivity.class);
         });
 
@@ -53,36 +56,48 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    protected void onPause() {
+        super.onPause();
+        musica.pausaAudio();
+    }
 
-
-    @Override
-    protected void onSaveInstanceState(Bundle estadoGuardado){
-        super.onSaveInstanceState(estadoGuardado);
-        if (musica.getMp() != null) {
-            int pos = musica.getMp().getCurrentPosition();
-            estadoGuardado.putInt("posicion", pos);
+    protected void onResume() {
+        super.onResume();
+        if(!musica.isMuted()) {
+            musica.resumeAudio();
+            mute.setImageResource(R.drawable.volumenon);
+        } else {
+            mute.setImageResource(R.drawable.volumenoff);
         }
     }
 
-    @Override
-    protected void onRestoreInstanceState(Bundle estadoGuardado){
-        super.onRestoreInstanceState(estadoGuardado);
-        if (estadoGuardado != null && musica.getMp() != null) {
-            int pos = estadoGuardado.getInt("posicion");
-            musica.getMp().seekTo(pos);
-        }
-    }
+//    @Override
+//    protected void onSaveInstanceState(Bundle estadoGuardado){
+//        super.onSaveInstanceState(estadoGuardado);
+////        if (musica.getMp() != null) {
+//        musica.pausaAudio();
+//        musicaPosition = musica.getMp().getCurrentPosition();
+//        isPlaying = musica.getMp().isPlaying();
+//        estadoGuardado.putInt("musciaPosicion", musicaPosition);
+//        estadoGuardado.putBoolean("isPlaying", isPlaying);
+////            int pos = musica.getMp().getCurrentPosition();
+////            estadoGuardado.putInt("posicion", pos);
+////        }
+//    }
+//
+//    @Override
+//    protected void onRestoreInstanceState(Bundle estadoGuardado){
+//        super.onRestoreInstanceState(estadoGuardado);
+////        if (estadoGuardado != null && musica.getMp() != null) {
+//        musica.resumeAudio();
+//        int pos = estadoGuardado.getInt("musciaPosicion");
+//        musica.getMp().seekTo(pos);
+////        }
+//    }
 
     private void openPantalla(Class clase) {
         Intent intent = new Intent(this, clase);
         startActivity(intent);
     }
 
-    public boolean isPlaying() {
-        return isPlaying;
-    }
-
-    public void setPlaying(boolean playing) {
-        isPlaying = playing;
-    }
 }

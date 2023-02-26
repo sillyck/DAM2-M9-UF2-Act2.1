@@ -11,6 +11,7 @@ public class Musica {
     private static final int[] canciones = new int[]{R.raw.nosotros,R.raw.fuegofuego,R.raw.cuestiondefe,R.raw.sudoresfrios,R.raw.masalchol,R.raw.alatumba,R.raw.dimequesi};
     private static MediaPlayer mp = null;
     private static int audioIndex = 0;
+    private static boolean muted = false;
 
     static {
         mp = new MediaPlayer();
@@ -58,5 +59,13 @@ public class Musica {
             mp.release();
             mp = null;
         }
+    }
+
+    public static boolean isMuted() {
+        return muted;
+    }
+
+    public static void setMuted(boolean muted) {
+        Musica.muted = muted;
     }
 }

@@ -38,7 +38,8 @@ public class ListadoConciertoActivity extends AppCompatActivity {
     private MainActivity main;
     private ArrayList<String> fecha = new ArrayList<>();
     private ArrayList<String> lugar = new ArrayList<>();
-    private ArrayList<String> mapa = new ArrayList<>();
+    private ArrayList<String> lat = new ArrayList<>();
+    private ArrayList<String> lng = new ArrayList<>();
     private ArrayList<String> entrada = new ArrayList<>();
 
 
@@ -49,6 +50,12 @@ public class ListadoConciertoActivity extends AppCompatActivity {
         musica = new Musica();
         main = new MainActivity();
         mute = findViewById(R.id.listamute);
+
+        if(!musica.isMuted()){
+            mute.setImageResource(R.drawable.volumenon);
+        }else {
+            mute.setImageResource(R.drawable.volumenoff);
+        }
 
         try {
             InputStream input = getAssets().open("conciertos.xml");
@@ -63,6 +70,9 @@ public class ListadoConciertoActivity extends AppCompatActivity {
                     Element elm = (Element) nList.item(i);
                     fecha.add(elm.getElementsByTagName("fecha").item(0).getTextContent());
                     lugar.add(elm.getElementsByTagName("ciudad").item(0).getTextContent() + " - " + elm.getElementsByTagName("escenarios").item(0).getTextContent());
+                    entrada.add(elm.getElementsByTagName("entrada").item(0).getTextContent());
+                    lat.add(elm.getElementsByTagName("lat").item(0).getTextContent());
+                    lng.add(elm.getElementsByTagName("long").item(0).getTextContent());
                 }
             }
         } catch (IOException e) {
@@ -75,14 +85,13 @@ public class ListadoConciertoActivity extends AppCompatActivity {
 
 
         mute.setOnClickListener(v ->{
-            if(main.isPlaying()){
+            if(!musica.isMuted()){
                 musica.pausaAudio();
-                main.setPlaying(false);
+                musica.setMuted(true);
                 mute.setImageResource(R.drawable.volumenoff);
-
             }else {
                 musica.resumeAudio();
-                main.setPlaying(true);
+                musica.setMuted(false);
                 mute.setImageResource(R.drawable.volumenon);
             }
         });
@@ -90,10 +99,10 @@ public class ListadoConciertoActivity extends AppCompatActivity {
 
 
 
+
         RecyclerView recyclerView = findViewById(R.id.recycle);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-//        CustomAdapter adapter = new CustomAdapter(fecha, lugar, entrada);
-        CustomAdapter adapter = new CustomAdapter(fecha, lugar);
+        CustomAdapter adapter = new CustomAdapter(this, fecha, lugar, entrada, lat, lng);
         recyclerView.setAdapter(adapter);
 
         tornar = findViewById(R.id.tornaListado);
@@ -103,20 +112,18 @@ public class ListadoConciertoActivity extends AppCompatActivity {
 
     }
 
-    protected String getNodeValue(String tag, Element element) {
-        NodeList nodeList = element.getElementsByTagName(tag);
-        Node node = nodeList.item(0);
-        if(node!=null){
-            if(node.hasChildNodes()){
-                Node child = node.getFirstChild();
-                while (child!=null){
-                    if(child.getNodeType() == Node.TEXT_NODE){
-                        return  child.getNodeValue();
-                    }
-                }
-            }
+    protected void onPause() {
+        super.onPause();
+        musica.pausaAudio();
+        isPlaying = false;
+    }
+
+    protected void onResume() {
+        super.onResume();
+        if(!musica.isMuted()) {
+            musica.resumeAudio();
+            isPlaying = true;
         }
-        return "";
     }
 
     private void openPantalla() {
