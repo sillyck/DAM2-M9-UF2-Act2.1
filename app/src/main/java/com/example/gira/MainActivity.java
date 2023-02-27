@@ -1,6 +1,8 @@
 package com.example.gira;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.view.GestureDetectorCompat;
 
 import android.annotation.SuppressLint;
@@ -16,12 +18,16 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 public class MainActivity extends AppCompatActivity {
 
     private Button mapa, listado, preferencias;
     private ImageView mute;
     private Musica musica;
+//    RelativeLayout relativeLayout;
+    ConstraintLayout constraintLayout;
+    SwipeListener swipeListener;
     private Constants constants;
     private int musicaPosition;
 
@@ -30,6 +36,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        constraintLayout = findViewById(R.id.constraint_layout);
+
+        swipeListener = new SwipeListener(constraintLayout);
 
         musica = new Musica();
         mute = findViewById(R.id.muteMain);
@@ -71,6 +81,8 @@ public class MainActivity extends AppCompatActivity {
             musica.musicaBotones(MainActivity.this);
             openPantalla((Preferencias.class));
         });
+
+
     }
 
     protected void onPause() {
@@ -96,5 +108,55 @@ public class MainActivity extends AppCompatActivity {
     public void cargarPreferencies() {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         musica.PausePreferences(sharedPreferences.getBoolean("musica: ", false));
+    }
+
+    private class SwipeListener implements View.OnTouchListener {
+
+        GestureDetector gestureDetector;
+
+        SwipeListener(View view){
+            int threshold = 100;
+            int velocity = 100;
+
+            GestureDetector.SimpleOnGestureListener listener =
+                    new GestureDetector.SimpleOnGestureListener(){
+                        @Override
+                        public boolean onDown(@NonNull MotionEvent e) {
+                            return true;
+                        }
+
+                        @Override
+                        public boolean onFling(@NonNull MotionEvent e1, @NonNull MotionEvent e2, float velocityX, float velocityY) {
+                            float xDiff = e2.getX() - e1.getX();
+                            float yDiff = e2.getY() - e1.getY();
+
+                            try {
+                                if (Math.abs(xDiff) > Math.abs(yDiff)) {
+                                    if (Math.abs(xDiff) > threshold && Math.abs(velocityX) > velocity){
+                                        if (xDiff > 0) {
+                                            //Derecha
+                                            openPantalla(ListadoConciertoActivity.class);
+                                        }else{
+                                            //Izquierda
+                                            constants.setMapaGeneral(true);
+                                            openPantalla(MapsActivity.class);
+                                        }
+                                        return true;
+                                    }
+                                }
+                            }catch (Exception e ){
+                                e.printStackTrace();
+                            }
+                            return true;
+                        }
+                    };
+            gestureDetector = new GestureDetector(listener);
+            view.setOnTouchListener(this);
+        }
+
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            return gestureDetector.onTouchEvent(event);
+        }
     }
 }
