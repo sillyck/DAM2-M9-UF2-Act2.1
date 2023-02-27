@@ -25,24 +25,11 @@ public class MainActivity extends AppCompatActivity {
     private Constants constants;
     private int musicaPosition;
 
-    private GestureDetector gestureDetector;
-    View.OnTouchListener gestureListener;
-
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        MyGestureListener gestureListener = new MyGestureListener(this);
-        gestureDetector = new GestureDetector(new MyGestureDetector(this));
-        gestureListener = new MyGestureListener(this)
-        {
-            public boolean onTouch(View v, MotionEvent event)
-            {
-                return gestureDetector.onTouchEvent(event);
-            }
-        };
 
         musica = new Musica();
         mute = findViewById(R.id.muteMain);
@@ -109,37 +96,5 @@ public class MainActivity extends AppCompatActivity {
     public void cargarPreferencies() {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         musica.PausePreferences(sharedPreferences.getBoolean("musica: ", false));
-    }
-
-    class MyGestureDetector extends GestureDetector.SimpleOnGestureListener{
-
-        Context context;
-        public MyGestureDetector(Context mainActivity)
-        {
-            context = mainActivity;
-        }
-
-        @Override
-        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-            try {
-                if(Math.abs(e1.getY() - e2.getY()) > 250 && Math.abs(velocityY) > 200) {
-                    System.out.println("Down");
-
-                }
-                else if(Math.abs(e2.getY()-e1.getY())>250 && Math.abs(velocityY)>200) {
-                    System.out.println("Up");
-                }
-
-                else if(e1.getX()-e2.getX()>120 && Math.abs(velocityX)>200) {
-                    System.out.println("Left");
-                }
-
-                else if(e2.getX()-e1.getX()>120 && Math.abs(velocityX)>200) {
-                    System.out.println("Right");
-                }
-            }
-            catch(Exception ignored) { }
-            return false;
-        }
     }
 }
