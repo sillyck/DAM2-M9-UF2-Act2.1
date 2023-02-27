@@ -4,6 +4,8 @@ import androidx.fragment.app.FragmentActivity;
 
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -19,12 +21,25 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private GoogleMap mMap, nMapView;
     private MapaBinding binding;
     private Button inicio;
+    private Button mute;
+    private Musica musica;
+    private Constants constants;
+    private boolean mapa = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.mapa);
+        musica = new Musica();
+        mute = findViewById(R.id.volumenMaps);
+
+        if(!musica.isMuted()){
+            mute.setBackgroundResource(R.drawable.volumenon);
+        }else {
+            mute.setBackgroundResource(R.drawable.volumenoff);
+        }
+
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -33,8 +48,35 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         inicio = findViewById(R.id.tornaMaps);
 
         inicio.setOnClickListener(v -> {
+            musica.musicaBotones(MapsActivity.this);
+            constants.setMapaGeneral(false);
             openPantalla(MainActivity.class);
         });
+
+        mute.setOnClickListener(v ->{
+            musica.musicaBotones(MapsActivity.this);
+            if(!musica.isMuted()){
+                musica.pausaAudio();
+                musica.setMuted(true);
+                mute.setBackgroundResource(R.drawable.volumenoff);
+            }else {
+                musica.resumeAudio();
+                musica.setMuted(false);
+                mute.setBackgroundResource(R.drawable.volumenon);
+            }
+        });
+    }
+
+    protected void onPause() {
+        super.onPause();
+        musica.pausaAudio();
+    }
+
+    protected void onResume() {
+        super.onResume();
+        if(!musica.isMuted()) {
+            musica.resumeAudio();
+        }
     }
 
     @Override
@@ -42,10 +84,27 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         nMapView = googleMap;
         mMap = googleMap;
 
-        LatLng zoom = new LatLng(40.4170525179115, -3.695737013858613);
-        nMapView.setMinZoomPreference(5.0f);
-        nMapView.moveCamera(CameraUpdateFactory.newLatLng(zoom));
+        if(constants.isMapaGeneral()) {
+            LatLng zoom = new LatLng(40.4170525179115, -3.695737013858613);
+            nMapView.moveCamera(CameraUpdateFactory.newLatLng(zoom));
+            nMapView.animateCamera(CameraUpdateFactory.newLatLngZoom(zoom, 5f));
 
+            markersMap();
+        }else {
+            LatLng zoom = new LatLng(constants.getLat(), constants.getLng());
+            nMapView.moveCamera(CameraUpdateFactory.newLatLng(zoom));
+            nMapView.animateCamera(CameraUpdateFactory.newLatLngZoom(zoom, 9f));
+
+            LatLng LOC = new LatLng(constants.getLat(), constants.getLng());
+            mMap.addMarker(new MarkerOptions().position(LOC).title(constants.getNombreGps()).icon(BitmapDescriptorFactory.fromResource(R.drawable.marcadorhdlr)));
+
+            markersMap();
+
+
+        }
+    }
+
+    private void markersMap(){
         LatLng BARCELONA = new LatLng(41.36342804571407, 2.152582269405529);
         LatLng CADIZ = new LatLng(36.70942989964542, -6.033733478396658);
         LatLng PAMPLONA = new LatLng(42.79604851460114, -1.6352923749240087);
@@ -65,7 +124,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.addMarker(new MarkerOptions().position(ALICANTE).title("ALICANTE").icon(BitmapDescriptorFactory.fromResource(R.drawable.marcadorhdlr)));
         mMap.addMarker(new MarkerOptions().position(MALLORCA).title("MALLORCA").icon(BitmapDescriptorFactory.fromResource(R.drawable.marcadorhdlr)));
         mMap.addMarker(new MarkerOptions().position(MURCIA).title("MURCIA").icon(BitmapDescriptorFactory.fromResource(R.drawable.marcadorhdlr)));
-
     }
 
     private void openPantalla(Class clase) {

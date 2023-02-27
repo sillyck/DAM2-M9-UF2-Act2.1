@@ -5,53 +5,71 @@
         <ciudad>BARCELONA</ciudad>
         <escenarios>PALAU SANT JORDI</escenarios>
         <entrada>https://www.ticketmaster.es/event/29595?subchannel_id=11803&amp;brand=base_mb_es</entrada>
+        <lat>41.36342804571407</lat>
+        <long>2.152582269405529</long>
     </concierto>
     <concierto>
         <fecha>31 MAR 2023</fecha>
         <ciudad>CÁDIZ</ciudad>
         <escenarios>PRIMAVERA TROMPETERA FESTIVAL</escenarios>
         <entrada>https://primaveratrompeterafestival.com/entradas/</entrada>
+        <lat>36.70942989964542</lat>
+        <long>-6.033733478396658</long>
     </concierto>
     <concierto>
         <fecha>01 ABR 2023</fecha>
         <ciudad>PAMPLONA</ciudad>
         <escenarios>IRUÑA ROCK</escenarios>
         <entrada>https://www.enterticket.es/eventos/iruna-fest-389668</entrada>
+        <lat>42.79604851460114</lat>
+        <long>-1.6352923749240087</long>
     </concierto>
     <concierto>
         <fecha>15 ABR 2023</fecha>
         <ciudad>VALENCIA</ciudad>
         <escenarios>PLAZA DE TOROS</escenarios>
         <entrada>https://www.ticketmaster.es/event/32721?subchannel_id=11803&amp;brand=base_mb_es</entrada>
+        <lat>39.46663376209704</lat>
+        <long>-0.3761627173285688</long>
     </concierto>
     <concierto>
         <fecha>21 ABR 2023</fecha>
         <ciudad>SALAMANCA</ciudad>
         <escenarios>ENJOY MULTIUSOS</escenarios>
         <entrada>https://www.ticketmaster.es/event/32587?subchannel_id=11803&amp;brand=base_mb_es</entrada>
+        <lat>40.97861617738214</lat>
+        <long>-5.650137430789435</long>
     </concierto>
     <concierto>
         <fecha>22 ABR 2023</fecha>
         <ciudad>BILBAO</ciudad>
         <escenarios>ARENA MIRIBILLA</escenarios>
         <entrada>https://www.ticketmaster.es/event/32675?subchannel_id=11803&amp;brand=base_mb_es</entrada>
+        <lat>43.25214436050138</lat>
+        <long>-2.9260665802778916</long>
     </concierto>
     <concierto>
         <fecha>05 MAY 2023</fecha>
         <ciudad>ALICANTE</ciudad>
         <escenarios>PLAZA DE TOROS</escenarios>
         <entrada>https://rocanrola.com/natos/</entrada>
+        <lat>38.352577566030995</lat>
+        <long>-0.48456845968182516</long>
     </concierto>
     <concierto>
         <fecha>18 MAY 2023</fecha>
         <ciudad>MALLORCA</ciudad>
         <escenarios>MALLORCA LIVE FESTIVAL</escenarios>
         <entrada>https://mallorcalivefestival.com/tickets/</entrada>
+        <lat>39.505014292717306</lat>
+        <long>2.5212251136752086</long>
     </concierto>
     <concierto>
         <fecha>16 JUN 2023</fecha>
         <ciudad>MURCIA</ciudad>
         <escenarios>ANIMAL SOUND</escenarios>
         <entrada>https://www.animalsoundfestival.com</entrada>
+        <lat>37.98377767244282</lat>
+        <long>-1.1122911438896461</long>
     </concierto>
 </conciertos>

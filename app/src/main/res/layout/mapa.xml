@@ -6,18 +6,32 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+
     <Button
         android:id="@+id/tornaMaps"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="5dp"
+        android:layout_width="32dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="15dp"
         android:layout_marginEnd="5dp"
         android:layout_marginBottom="5dp"
-        android:background="#359c5e"
+        android:background="@drawable/atras"
         android:clickable="true"
         android:padding="5dp"
-        android:text="Torna"
+        android:text=" "
+        android:textColor="#ffffff" />
+
+    <Button
+        android:id="@+id/volumenMaps"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="335dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="5dp"
+        android:background="@drawable/volumenon"
+        android:clickable="true"
+        android:padding="5dp"
+        android:text=" "
         android:textColor="#ffffff" />
 
     <fragment
