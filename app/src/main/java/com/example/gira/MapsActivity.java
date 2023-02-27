@@ -4,8 +4,6 @@ import androidx.fragment.app.FragmentActivity;
 
 import android.os.Bundle;
 import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;

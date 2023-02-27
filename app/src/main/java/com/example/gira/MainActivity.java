@@ -1,31 +1,45 @@
 package com.example.gira;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.view.GestureDetectorCompat;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.Toast;
+import android.widget.RelativeLayout;
 
 public class MainActivity extends AppCompatActivity {
 
     private Button mapa, listado, preferencias;
     private ImageView mute;
     private Musica musica;
+//    RelativeLayout relativeLayout;
+    ConstraintLayout constraintLayout;
+    SwipeListener swipeListener;
     private Constants constants;
     private int musicaPosition;
-
 
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        constraintLayout = findViewById(R.id.constraint_layout);
+
+        swipeListener = new SwipeListener(constraintLayout);
 
         musica = new Musica();
         mute = findViewById(R.id.muteMain);
@@ -35,14 +49,13 @@ public class MainActivity extends AppCompatActivity {
         musica.playAudio(MainActivity.this);
 
 
-
-        mute.setOnClickListener(v ->{
+        mute.setOnClickListener(v -> {
             musica.musicaBotones(MainActivity.this);
-            if(!musica.isMuted()){
+            if (!musica.isMuted()) {
                 musica.pausaAudio();
                 musica.setMuted(true);
                 mute.setImageResource(R.drawable.volumenoff);
-            }else {
+            } else {
                 musica.resumeAudio();
                 musica.setMuted(false);
                 mute.setImageResource(R.drawable.volumenon);
@@ -68,6 +81,8 @@ public class MainActivity extends AppCompatActivity {
             musica.musicaBotones(MainActivity.this);
             openPantalla((Preferencias.class));
         });
+
+
     }
 
     protected void onPause() {
@@ -77,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
 
     protected void onResume() {
         super.onResume();
-        if(!musica.isMuted()) {
+        if (!musica.isMuted()) {
             musica.resumeAudio();
             mute.setImageResource(R.drawable.volumenon);
         } else {
@@ -85,38 +100,63 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-//    @Override
-//    protected void onSaveInstanceState(Bundle estadoGuardado){
-//        super.onSaveInstanceState(estadoGuardado);
-////        if (musica.getMp() != null) {
-//        musica.pausaAudio();
-//        musicaPosition = musica.getMp().getCurrentPosition();
-//        isPlaying = musica.getMp().isPlaying();
-//        estadoGuardado.putInt("musciaPosicion", musicaPosition);
-//        estadoGuardado.putBoolean("isPlaying", isPlaying);
-////            int pos = musica.getMp().getCurrentPosition();
-////            estadoGuardado.putInt("posicion", pos);
-////        }
-//    }
-//
-//    @Override
-//    protected void onRestoreInstanceState(Bundle estadoGuardado){
-//        super.onRestoreInstanceState(estadoGuardado);
-////        if (estadoGuardado != null && musica.getMp() != null) {
-//        musica.resumeAudio();
-//        int pos = estadoGuardado.getInt("musciaPosicion");
-//        musica.getMp().seekTo(pos);
-////        }
-//    }
-
     private void openPantalla(Class clase) {
         Intent intent = new Intent(this, clase);
         startActivity(intent);
     }
 
-    public void cargarPreferencies(){
+    public void cargarPreferencies() {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         musica.PausePreferences(sharedPreferences.getBoolean("musica: ", false));
     }
 
+    private class SwipeListener implements View.OnTouchListener {
+
+        GestureDetector gestureDetector;
+
+        SwipeListener(View view){
+            int threshold = 100;
+            int velocity = 100;
+
+            GestureDetector.SimpleOnGestureListener listener =
+                    new GestureDetector.SimpleOnGestureListener(){
+                        @Override
+                        public boolean onDown(@NonNull MotionEvent e) {
+                            return true;
+                        }
+
+                        @Override
+                        public boolean onFling(@NonNull MotionEvent e1, @NonNull MotionEvent e2, float velocityX, float velocityY) {
+                            float xDiff = e2.getX() - e1.getX();
+                            float yDiff = e2.getY() - e1.getY();
+
+                            try {
+                                if (Math.abs(xDiff) > Math.abs(yDiff)) {
+                                    if (Math.abs(xDiff) > threshold && Math.abs(velocityX) > velocity){
+                                        if (xDiff > 0) {
+                                            //Derecha
+                                            openPantalla(ListadoConciertoActivity.class);
+                                        }else{
+                                            //Izquierda
+                                            constants.setMapaGeneral(true);
+                                            openPantalla(MapsActivity.class);
+                                        }
+                                        return true;
+                                    }
+                                }
+                            }catch (Exception e ){
+                                e.printStackTrace();
+                            }
+                            return true;
+                        }
+                    };
+            gestureDetector = new GestureDetector(listener);
+            view.setOnTouchListener(this);
+        }
+
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            return gestureDetector.onTouchEvent(event);
+        }
+    }
 }
