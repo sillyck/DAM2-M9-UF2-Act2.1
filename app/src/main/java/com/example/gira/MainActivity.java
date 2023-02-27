@@ -1,13 +1,16 @@
 package com.example.gira;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GestureDetectorCompat;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
-import android.media.MediaPlayer;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -16,12 +19,14 @@ import android.widget.ImageView;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Button mapa, listado;
+    private Button mapa, listado, preferencias;
     private ImageView mute;
-    private boolean isPlaying = false;
     private Musica musica;
+    private Constants constants;
+    private int musicaPosition;
 
-    private GestureDetectorCompat mGestureDetector;
+    private GestureDetector gestureDetector;
+    View.OnTouchListener gestureListener;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -29,21 +34,33 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        musica = new Musica();
+        MyGestureListener gestureListener = new MyGestureListener(this);
+        gestureDetector = new GestureDetector(new MyGestureDetector(this));
+        gestureListener = new MyGestureListener(this)
+        {
+            public boolean onTouch(View v, MotionEvent event)
+            {
+                return gestureDetector.onTouchEvent(event);
+            }
+        };
 
-        mGestureDetector = new GestureDetectorCompat(this, new GestureListenner());
+        musica = new Musica();
+        mute = findViewById(R.id.muteMain);
+
+        cargarPreferencies();
 
         musica.playAudio(MainActivity.this);
 
-        mute = findViewById(R.id.muteMain);
-        mute.setOnClickListener(v ->{
-            if(isPlaying){
+
+        mute.setOnClickListener(v -> {
+            musica.musicaBotones(MainActivity.this);
+            if (!musica.isMuted()) {
                 musica.pausaAudio();
-                isPlaying = false;
+                musica.setMuted(true);
                 mute.setImageResource(R.drawable.volumenoff);
-            }else {
+            } else {
                 musica.resumeAudio();
-                isPlaying = true;
+                musica.setMuted(false);
                 mute.setImageResource(R.drawable.volumenon);
             }
         });
@@ -51,49 +68,36 @@ public class MainActivity extends AppCompatActivity {
 
         mapa = findViewById(R.id.mapa);
         mapa.setOnClickListener(v -> {
+            musica.musicaBotones(MainActivity.this);
+            constants.setMapaGeneral(true);
             openPantalla(MapsActivity.class);
         });
 
         listado = findViewById(R.id.listado);
         listado.setOnClickListener(v -> {
+            musica.musicaBotones(MainActivity.this);
             openPantalla((ListadoConciertoActivity.class));
+        });
+
+        preferencias = findViewById(R.id.pref);
+        preferencias.setOnClickListener(v -> {
+            musica.musicaBotones(MainActivity.this);
+            openPantalla((Preferencias.class));
         });
     }
 
-    private class GestureListenner extends GestureDetector.SimpleOnGestureListener{
-
-        //Obre el llistat de concerts
-        @Override
-        public void onLongPress(@NonNull MotionEvent e) {
-            super.onLongPress(e);
-            openPantalla(ListadoConciertoActivity.class);
-        }
-
-        //Obre el mapa amb els concerts
-
-
-        @Override
-        public boolean onDoubleTapEvent(@NonNull MotionEvent e) {
-            openPantalla(ListadoConciertoActivity.class);
-            return super.onDoubleTapEvent(e);
-        }
+    protected void onPause() {
+        super.onPause();
+        musica.pausaAudio();
     }
 
-    @Override
-    protected void onSaveInstanceState(Bundle estadoGuardado){
-        super.onSaveInstanceState(estadoGuardado);
-        if (musica.getMp() != null) {
-            int pos = musica.getMp().getCurrentPosition();
-            estadoGuardado.putInt("posicion", pos);
-        }
-    }
-
-    @Override
-    protected void onRestoreInstanceState(Bundle estadoGuardado){
-        super.onRestoreInstanceState(estadoGuardado);
-        if (estadoGuardado != null && musica.getMp() != null) {
-            int pos = estadoGuardado.getInt("posicion");
-            musica.getMp().seekTo(pos);
+    protected void onResume() {
+        super.onResume();
+        if (!musica.isMuted()) {
+            musica.resumeAudio();
+            mute.setImageResource(R.drawable.volumenon);
+        } else {
+            mute.setImageResource(R.drawable.volumenoff);
         }
     }
 
@@ -102,11 +106,40 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public boolean isPlaying() {
-        return isPlaying;
+    public void cargarPreferencies() {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        musica.PausePreferences(sharedPreferences.getBoolean("musica: ", false));
     }
 
-    public void setPlaying(boolean playing) {
-        isPlaying = playing;
+    class MyGestureDetector extends GestureDetector.SimpleOnGestureListener{
+
+        Context context;
+        public MyGestureDetector(Context mainActivity)
+        {
+            context = mainActivity;
+        }
+
+        @Override
+        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+            try {
+                if(Math.abs(e1.getY() - e2.getY()) > 250 && Math.abs(velocityY) > 200) {
+                    System.out.println("Down");
+
+                }
+                else if(Math.abs(e2.getY()-e1.getY())>250 && Math.abs(velocityY)>200) {
+                    System.out.println("Up");
+                }
+
+                else if(e1.getX()-e2.getX()>120 && Math.abs(velocityX)>200) {
+                    System.out.println("Left");
+                }
+
+                else if(e2.getX()-e1.getX()>120 && Math.abs(velocityX)>200) {
+                    System.out.println("Right");
+                }
+            }
+            catch(Exception ignored) { }
+            return false;
+        }
     }
 }
